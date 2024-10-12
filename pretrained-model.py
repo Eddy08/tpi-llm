@@ -1,9 +1,12 @@
 import transformers
-import os
+import sys
 
 
-# Set token from environment variable
-token = os.environ.get("HUGGINGFACE_HUB_TOKEN")
+# Parse command-line arguments
+for arg in sys.argv[1:]:
+    if arg.startswith('HUGGINGFACE_HUB_TOKEN='):
+        token = arg.split('=')[1]
+        break
 
 
 # Set verbosity to error
@@ -12,7 +15,7 @@ transformers.logging.set_verbosity_error()
 
 # Load pre-trained model with authentication token
 model_name = "meta-llama/Llama-2-7b-hf"
-model = transformers.AutoModelForCausalLM.from_pretrained(model_name, use_auth_token=True)
+model = transformers.AutoModelForCausalLM.from_pretrained(model_name, use_auth_token=token)
 
 
 # Save model locally (optional)
