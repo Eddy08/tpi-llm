@@ -1,22 +1,41 @@
-import transformers
-import sys
+import os
+import torch
+from transformers import AutoModelForCausalLM
 
 
-# Parse command-line arguments
-for arg in sys.argv[1:]:
-    if arg.startswith('HUGGINGFACE_HUB_TOKEN='):
-        token = arg.split('=')[1]
-        break
-
-
-# Set verbosity to error
-transformers.logging.set_verbosity_error()
-
-
-# Load pre-trained model with authentication token
+# Model settings
 model_name = "meta-llama/Llama-2-7b-hf"
-model = transformers.AutoModelForCausalLM.from_pretrained(model_name, use_auth_token=token)
+download_dir = "pretrained_models"
 
 
-# Save model locally (optional)
-model.save_pretrained(f"pretrained_models/{model_name}")
+# Create directory if not exists
+if not os.path.exists(download_dir):
+    os.makedirs(download_dir)
+
+
+# Download model weights
+def download_model(token):
+    try:
+        model = AutoModelForCausalLM.from_pretrained(model_name, use_auth_token=token)
+        model.save_pretrained(os.path.join(download_dir, model_name), weights_only=True)
+        print(f"Model weights saved to {os.path.join(download_dir, model_name)}")
+    except Exception as e:
+        print(f"Error downloading model: {str(e)}")
+
+
+# Load token from environment variable or input
+token = os.environ.get("HUGGINGFACE_HUB_TOKEN")
+if token is None:
+    token = input("Enter Hugging Face token: ")
+
+
+# Download model
+download_model(token)
+
+
+# Verify model weights
+model_path = os.path.join(download_dir, model_name)
+if os.path.exists(os.path.join(model_path, "pytorch_model.bin")):
+    print("Model weights downloaded successfully")
+else:
+    print("Model weights not found")
