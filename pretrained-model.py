@@ -1,5 +1,6 @@
 import os
 import torch
+import sys
 from transformers import AutoModelForCausalLM
 
 
@@ -24,9 +25,13 @@ def download_model(token):
 
 
 # Load token from environment variable or input
-token = os.environ.get("HUGGINGFACE_HUB_TOKEN")
-if token is None:
-    token = input("Enter Hugging Face token: ")
+
+# Parse command-line arguments
+for arg in sys.argv[1:]:
+    if arg.startswith('HUGGINGFACE_HUB_TOKEN='):
+        token = arg.split('=')[1]
+        break
+
 
 
 # Download model
