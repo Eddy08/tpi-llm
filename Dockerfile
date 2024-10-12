@@ -39,11 +39,12 @@ RUN conda install -y python=3.9 && \
 
 # Clone repo from github and install required packages
 WORKDIR /root
-RUN git lfs install && \
-    git clone https://github.com/Eddy08/tpi-llm && \
-    cd /root/TPI-LLM && \
-    pip install --no-cache-dir -r requirements.txt
-ENV PYTHONPATH /root/TPI-LLM/src:$PYTHONPATH
+RUN git lfs install
+RUN git clone https://github.com/Eddy08/tpi-llm
 
 WORKDIR /root/TPI-LLM
+
+RUN pip install --no-cache-dir -r /root/tpi-llm/requirements.txt
+ENV PYTHONPATH /root/TPI-LLM/src:$PYTHONPATH
+
 CMD ["/bin/bash"]
