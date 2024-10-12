@@ -6,11 +6,11 @@ import os
 token = os.environ.get("HUGGINGFACE_HUB_TOKEN")
 
 
-# Login to Hugging Face Hub
-transformers.huggingface_hub.login(token)
+# Set verbosity to error
+transformers.logging.set_verbosity_error()
 
 
-# Rest of your code...
+# Load pre-trained model with authentication token
 model_name = "meta-llama/Llama-2-7b-hf"
 model = transformers.AutoModelForCausalLM.from_pretrained(model_name, use_auth_token=True)
 
