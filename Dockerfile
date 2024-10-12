@@ -3,25 +3,25 @@ FROM ubuntu:18.04
 # Install apt tools
 RUN apt update && \
     apt install -y --no-install-recommends \
-          build-essential \
-          ca-certificates \
-          cmake \
-          zip \
-          unzip \
-          vim \
-          wget \
-          curl \
-          git \
-          git-lfs \
-          apt-transport-https \
-          openssh-client \
-          openssh-server \
-          iputils-ping \
-          net-tools \
-          htop \
-          bc \
-          iproute2 \
-          iperf && \
+    build-essential \
+    ca-certificates \
+    cmake \
+    zip \
+    unzip \
+    vim \
+    wget \
+    curl \
+    git \
+    git-lfs \
+    apt-transport-https \
+    openssh-client \
+    openssh-server \
+    iputils-ping \
+    net-tools \
+    htop \
+    bc \
+    iproute2 \
+    iperf && \
     apt clean && \
     rm -rf /var/lib/apt/lists/*
 
@@ -40,7 +40,7 @@ RUN conda install -y python=3.9 && \
 # Clone repo from github and install required packages
 WORKDIR /root
 RUN git lfs install && \
-    git clone https://anonymous.4open.science/r/tpi-llm && \
+    git clone https://github.com/Eddy08/tpi-llm && \
     cd /root/TPI-LLM && \
     pip install --no-cache-dir -r requirements.txt
 ENV PYTHONPATH /root/TPI-LLM/src:$PYTHONPATH
