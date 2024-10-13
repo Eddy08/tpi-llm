@@ -1,6 +1,6 @@
 import argparse
 import torch.multiprocessing as mp
-from run_llama import main
+from src.run_llama import main
 
 
 def init_process(rank, fn, args):
