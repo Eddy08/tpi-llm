@@ -126,7 +126,7 @@ class MemoryManager:
         try:
             # load pretrained weights into memory
             with torch.no_grad(), open(bin_path, 'rb') as f:
-                pretrained_weights = torch.load(f, map_location=self._device)
+                pretrained_weights = torch.load(f, map_location=self._device,weights_only=True)
 
             # use a thread pool to load weights concurrently
             with ThreadPoolExecutor() as executor:
