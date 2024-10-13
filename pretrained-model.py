@@ -17,13 +17,21 @@ if not os.path.exists(download_dir):
 # Download model weights
 def download_model(token):
     try:
+        # Set torch dtype to reduce memory requirements
+        torch_dtype = torch.float16
+        
+        # Use revision to download specific model version
+        revision = "main"
+        
+        # Download and save model
         model = AutoModelForCausalLM.from_pretrained(
             model_name, 
             token=token, 
-            low_memory=True, 
-            torch_dtype=torch.float16
+            revision=revision, 
+            torch_dtype=torch_dtype
         )
         model.save_pretrained(os.path.join(download_dir, model_name), weights_only=True)
+        
         print(f"Model weights saved to {os.path.join(download_dir, model_name)}")
     except Exception as e:
         print(f"Error downloading model: {str(e)}")
@@ -46,7 +54,7 @@ if os.path.exists(os.path.join(model_path, "pytorch_model.bin")):
     print("Model weights downloaded successfully")
     try:
         # Load model to test
-        model = AutoModelForCausalLM.from_pretrained(model_path, low_memory=True, torch_dtype=torch.float16)
+        model = AutoModelForCausalLM.from_pretrained(model_path)
         print("Model loaded successfully")
     except Exception as e:
         print(f"Error loading model: {str(e)}")
