@@ -6,7 +6,8 @@ from transformers import AutoModelForCausalLM
 ## Logs for GPU
 print(torch.cuda.is_available())  # Should print: True
 print(torch.cuda.device_count())  # Should print: 1
-print(torch.cuda.current_device())  # Should print: 0
+if(torch.cuda.is_available()):
+    print(torch.cuda.current_device())  # Should print: 0
 
 
 # Model settings
