@@ -2,7 +2,7 @@ import os
 import torch
 import sys
 import requests
-from transformers import AutoModelForCausalLM
+from transformers import AutoModelForCausalLM, AutoTokenizer
 
 
 # Model settings
@@ -40,6 +40,17 @@ def download_model(token):
         print(f"Error downloading model: {str(e)}")
 
 
+# Download tokenizer files
+def download_tokenizer(token):
+    try:
+        tokenizer = AutoTokenizer.from_pretrained(model_name, use_auth_token=token)
+        tokenizer.save_pretrained(os.path.join(download_dir, model_name))
+        
+        print(f"Tokenizer files saved to {os.path.join(download_dir, model_name)}")
+    except Exception as e:
+        print(f"Error downloading tokenizer: {str(e)}")
+
+
 # Load token from environment variable or input
 for arg in sys.argv[1:]:
     if arg.startswith('HUGGINGFACE_HUB_TOKEN='):
@@ -47,11 +58,12 @@ for arg in sys.argv[1:]:
         break
 
 
-# Download model
+# Download model and tokenizer
 download_model(token)
+download_tokenizer(token)
 
 
-# Verify model weights
+# Verify model weights and tokenizer
 model_path = os.path.join(download_dir, model_name)
 print(f"Model path: {model_path}")
 
@@ -65,6 +77,13 @@ if os.path.exists(model_path):
         print("pytorch_model.bin found")
     else:
         print("pytorch_model.bin not found")
+        
+    tokenizer_files = ['tokenizer.json', 'vocab.json', 'merges.txt']
+    for file in tokenizer_files:
+        if file in weight_files:
+            print(f"{file} found")
+        else:
+            print(f"{file} not found")
 else:
     print("Model directory not found")
 
