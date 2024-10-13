@@ -114,7 +114,13 @@ def main(my_rank, args, dist=None):
     tokenizer, streamer = None, None
     input_ids = ""
     if my_rank == 0:
-        tokenizer = tokenizer_class.from_pretrained(args.model_path, trust_remote_code=True)
+        try:
+            tokenizer = tokenizer_class.from_pretrained(args.model_path, trust_remote_code=True)
+        except OSError as e:
+                logger.error(f"Error loading tokenizer: {e}")
+                print(f"Tokenizer loading error: {str(e)}")
+                raise Exception("Error at line 118 of run_llama.py on tokenizer due to error {e}")
+            
         if tokenizer.pad_token is None:
             tokenizer.pad_token = tokenizer.eos_token  # set pad token if not set
 
