@@ -17,7 +17,7 @@ if not os.path.exists(download_dir):
 # Download model weights
 def download_model(token):
     try:
-        model = AutoModelForCausalLM.from_pretrained(model_name, use_auth_token=token)
+        model = AutoModelForCausalLM.from_pretrained(model_name, token=token, timeout=300)
         model.save_pretrained(os.path.join(download_dir, model_name), weights_only=True)
         print(f"Model weights saved to {os.path.join(download_dir, model_name)}")
     except Exception as e:
@@ -25,8 +25,6 @@ def download_model(token):
 
 
 # Load token from environment variable or input
-
-# Parse command-line arguments
 for arg in sys.argv[1:]:
     if arg.startswith('HUGGINGFACE_HUB_TOKEN='):
         token = arg.split('=')[1]
