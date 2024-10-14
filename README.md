@@ -1,11 +1,21 @@
 ## Additioal Commands
 
-IF you want to install the pretrained-models:
+Need to install the pretrained-models:
+
+``
 python pretrained-model.py HUGGINGFACE_HUB_TOKEN=<HF_TOKEN>
+``
 
-else
-Using llama-stack
+For Running:
+~/tpi-llm/src#:
 
+``
+python run_multiprocess.py --world_size 4 --model_type llama --model_path /root/tpi-llm/pretrained_models/meta-llama/Llama-2-7b-hf/
+--prompt "how are you?" --length 20 --memory_window 4  
+``
+
+Final Output:
+![working-output](FirstWorkingResponse.png)
 Docker commands:
 
 docker build -t tpi-llm:local . --progress=plain --no-cache
